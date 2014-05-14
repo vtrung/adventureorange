@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 
@@ -33,6 +34,8 @@ public class DrawPanel extends JPanel{
 //			sprites: Sprite.java; SpriteDoor.java; SpriteEnemy.java; SpriteItem.java;
 //					SpriteOrange.java; SpriteTree.java; Wall.java;
 	
+	private Image dbImage;
+	private Graphics dbg;
 	public boolean end = false;
 	public boolean treetouch = false;
 	public boolean win = false;
@@ -43,7 +46,7 @@ public class DrawPanel extends JPanel{
 	private int downmv = 0;
 	private int leftmv = 0;
 	private int rightmv = 0;
-	private int frameRate = 100; //frame rate in frames per second.
+	private int frameRate = 80; //frame rate in frames per second.
 	private int mapLoc = 0;
 	private ArrayList<Map> maps = new ArrayList<Map>();
 	private ArrayList<SpriteOrange> lives = new ArrayList<SpriteOrange>();
@@ -166,6 +169,12 @@ public class DrawPanel extends JPanel{
 			
 	} //	restart()	//return settings to beginning of game
 	
+	public void paint(Graphics g){
+		dbImage = createImage(getWidth(), getHeight());
+		dbg = dbImage.getGraphics();
+		paintComponent(dbg);
+		g.drawImage(dbImage, 0, 0, this);
+	}
 	/**
 	 * overriding paintComponenet to draw game and sprites
 	 */
@@ -174,12 +183,11 @@ public class DrawPanel extends JPanel{
 		super.paintComponent(g);
 		this.setBackground(null);
 		Graphics2D g2 = (Graphics2D)g;
-	    @SuppressWarnings("unused")
-		RenderingHints rh = new RenderingHints(
+	    RenderingHints rh = new RenderingHints(
 	             RenderingHints.KEY_ANTIALIASING,
 	             RenderingHints.VALUE_ANTIALIAS_ON);
-	   
-	    this.setOpaque(false);
+	    g2.setRenderingHints(rh);
+	    //this.setOpaque(false);
 
 	    maps.get(mapLoc).drawMap(g2);
 	    for(int index = 0; index < maps.get(mapLoc).getSprites().size(); index++){
